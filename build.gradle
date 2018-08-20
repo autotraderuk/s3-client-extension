@@ -1,0 +1,54 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '2.0.1'
+    id 'scala'
+    id 'idea'
+    id 'com.github.maiflai.scalatest' version '0.16'
+    id 'com.avast.gradle.docker-compose' version '0.7.1'
+    id 'maven-publish'
+}
+
+group 'uk.co.autotrader'
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    scalaVersionMajor = "2"
+    scalaVersionMinor = "11"
+    scalaVersionMicro = "8"
+    scalaVersion = "${scalaVersionMajor}.${scalaVersionMinor}.${scalaVersionMicro}"
+}
+
+dependencies {
+    compile(
+        "org.scala-lang:scala-library:${scalaVersion}",
+        "org.scala-lang:scala-reflect:${scalaVersion}",
+        "org.scala-lang:scala-compiler:${scalaVersion}",
+        'com.amazonaws:aws-java-sdk:1.11.160'
+    )
+    testCompile(
+        "org.scalatest:scalatest_${scalaVersionMajor}.${scalaVersionMinor}:3.0.1"
+    )
+    testRuntime(
+        'org.pegdown:pegdown:1.4.2'
+    )
+}
+
+shadowJar {
+    baseName = project.name
+    classifier = ''
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
+dockerCompose.isRequiredBy(test)
+
+defaultTasks 'build', 'test'

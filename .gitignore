@@ -1,0 +1,33 @@
+*.class
+*.log
+
+# sbt specific
+.cache
+.history
+.lib/
+dist/*
+target/
+lib_managed/
+src_managed/
+project/boot/
+project/plugins/project/
+
+# Scala-IDE specific
+.scala_dependencies
+.worksheet
+
+.idea
+
+*.iml
+.gradle
+build/
+out/
+
+.DS_Store
+/env/
+
+*/dist-index
+
+*.egg-info
+
+*.pyc
