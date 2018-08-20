@@ -19,7 +19,7 @@ libraryDependencies += "uk.co.autotrader" %% "s3-client-extension" % "1.0.0-alph
   
 On maven, update your `pom.xml` file by adding the following to your dependencies:  
 
-```html
+```xml
 <dependency>
 	<groupId>uk.co.autotrader</groupId>
 	<artifactId>s3-client-extension</artifactId>
