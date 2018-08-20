@@ -1,5 +1,5 @@
 # s3-client-extension for Java/Scala
-![Travis (.org)](https://img.shields.io/travis/autotraderuk/s3-client-extension.svg)
+[![Build Status](https://secure.travis-ci.org/autotraderuk/s3-client-extension.png)](https://travis-ci.org/autotraderuk/s3-client-extension)
 
 *Disclaimer: This is an alpha release until we get continuous integration and pipelines in place. Use at your own risk!*
   
