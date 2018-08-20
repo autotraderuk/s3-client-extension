@@ -1,1 +1,9 @@
-language: java
+sudo: required
+
+language: scala
+
+scala:
+- 2.11.8
+
+services:
+- docker
