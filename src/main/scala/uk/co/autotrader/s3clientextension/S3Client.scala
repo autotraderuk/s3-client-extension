@@ -31,6 +31,7 @@ class S3Client(amazonS3: AmazonS3) {
                           prefix: String,
                           fileTypeFilter: Option[String] = None): Seq[S3ObjectInputStream] = {
     getAllObjectSummaries(bucket, prefix, fileTypeFilter)
+      .view
       .map(s => amazonS3.getObject(s.getBucketName, s.getKey).getObjectContent)
   }
 
@@ -62,8 +63,8 @@ class S3Client(amazonS3: AmazonS3) {
     val stream = Stream.iterate(amazonS3.listObjects(bucket, prefix)) { amazonS3.listNextBatchOfObjects }
     val objectListings =
       stream
-      .takeWhile(_.isTruncated)
-      .foldLeft(Seq.empty[ObjectListing]) { (acc, element) => acc :+ element }
+        .takeWhile(_.isTruncated)
+        .foldLeft(Seq.empty[ObjectListing]) { (acc, element) => acc :+ element }
 
     objectListings :+ stream.dropWhile(_.isTruncated).head
   }
