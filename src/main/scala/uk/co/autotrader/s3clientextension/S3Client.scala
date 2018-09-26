@@ -10,11 +10,10 @@ import com.amazonaws.services.s3.{AmazonS3, AmazonS3ClientBuilder}
 import scala.collection.JavaConverters._
 import scala.collection.parallel.ParSeq
 
-
 /**
   * S3 Client for AmazonS3.
-  * @param amazonS3 AmazonS3 object.
-  *
+  * @constructor Creates a new S3Client object with a given amazon s3 client.
+  * @param amazonS3 [[com.amazonaws.services.s3.AmazonS3]] object.
   */
 class S3Client(amazonS3: AmazonS3) {
 
@@ -162,13 +161,19 @@ class S3Client(amazonS3: AmazonS3) {
 
 }
 
+/**
+  * Factory for [[S3Client]] instances.
+  */
 object S3Client {
+
+  /**
+    * Creates a new S3Client object with a given amazon s3 client.
+    */
   def apply(amazonS3: AmazonS3) = new S3Client(amazonS3)
 
   /**
-    * @return S3Client object with a default AmazonS3 using the
-    *         { @link com.amazonaws.services.s3.S3CredentialsProviderChain}
-    *         and { @link com.amazonaws.regions.DefaultAwsRegionProviderChain} chain
+    * @return S3Client object with a default AmazonS3 using the [[com.amazonaws.services.s3.S3CredentialsProviderChain]]
+    *         and [[com.amazonaws.regions.DefaultAwsRegionProviderChain]] chain.
     */
   def withDefaultAmazonS3 = new S3Client(AmazonS3ClientBuilder.defaultClient())
 }
