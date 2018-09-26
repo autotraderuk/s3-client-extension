@@ -1,13 +1,14 @@
 plugins {
-    id 'com.github.johnrengelman.shadow' version '2.0.1'
     id 'scala'
     id 'idea'
     id 'com.github.maiflai.scalatest' version '0.22'
     id 'com.avast.gradle.docker-compose' version '0.7.1'
     id 'maven-publish'
+    id 'signing'
 }
 
-group 'uk.co.autotrader'
+group =  'uk.co.autotrader'
+version = '0.1.0'
 sourceCompatibility = 1.8
 
 repositories {
@@ -36,17 +37,68 @@ dependencies {
     )
 }
 
-shadowJar {
-    baseName = project.name
-    classifier = ''
+task sourcesJar(type: Jar, dependsOn: classes) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+task javadocJar(type: Jar) {
+    from scaladoc
+    classifier = 'javadoc'
 }
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
+            groupId group
+            artifactId 's3-client-extension'
+            version version
+
             from components.java
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom {
+                name = 's3-client-extension'
+                description = 'Enables Scala developers to interact with the Amazon Web Services with ease.'
+                url = 'https://github.com/autotraderuk/s3-client-extension'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        name = 'Seema Anwer'
+                        email = 'seema.anwer@autotrader.co.uk'
+                    }
+                    developer {
+                        name = 'Karim Essawi'
+                        email = 'karim.essawi@autotrader.co.uk'
+                    }
+                }
+                scm {
+                    url = 'https://github.com/autotraderuk/s3-client-extension'
+                    connection = 'scm:git:git://github.com/autotraderuk/s3-client-extension.git'
+                    developerConnection = 'scm:git:ssh://git@github.com/autotraderuk/s3-client-extension.git'
+                }
+            }
         }
     }
+    repositories {
+        maven {
+            url "https://oss.sonatype.org/${version.endsWith('-SNAPSHOT') ? 'content/repositories/snapshots' : 'service/local/staging/deploy/maven2'}"
+            credentials {
+                username sonatypeUsername
+                password sonatypePassword
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.mavenJava
 }
 
 dockerCompose.isRequiredBy(test)
